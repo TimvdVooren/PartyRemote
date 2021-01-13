@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.ControlActivity">
+
+    <TextView
+        android:id="@+id/control_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Party Remote"
+        android:textAlignment="center"
+        android:textColor="@color/purple_700"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/control_lights_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Lights"
+        android:textColor="@color/purple_200"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/control_lights_color_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/control_title" />
+
+    <TextView
+        android:id="@+id/control_lasers_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:text="Lasers"
+        android:textColor="@color/purple_200"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/control_lasers_switch"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/control_lights_text" />
+
+    <TextView
+        android:id="@+id/control_disco_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:text="Disco Mode"
+        android:textColor="@color/purple_200"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/control_disco_switch"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/control_lasers_text" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/control_lights_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/control_lights_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/control_lights_color_button"
+        app:layout_constraintTop_toTopOf="@+id/control_lights_text"
+        android:checked="true"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/control_lasers_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/control_lasers_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/control_lasers_text"
+        app:layout_constraintTop_toTopOf="@+id/control_lasers_text"
+        android:checked="true"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/control_disco_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/control_disco_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/control_disco_text"
+        app:layout_constraintTop_toTopOf="@id/control_disco_text"
+        android:checked="false"/>
+
+    <ImageButton
+        android:id="@+id/control_lights_color_button"
+        android:layout_width="30dp"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:tint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/control_lights_text"
+        app:layout_constraintEnd_toStartOf="@+id/control_lights_switch"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/control_lights_text"
+        app:layout_constraintTop_toTopOf="@+id/control_lights_text"
+        app:srcCompat="@drawable/ic_circle" />
+
+    <ImageView
+        android:id="@+id/control_lights_picked_color"
+        android:layout_width="30dp"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:layout_margin="3dp"
+        app:layout_constraintBottom_toBottomOf="@id/control_lights_color_button"
+        app:layout_constraintEnd_toEndOf="@+id/control_lights_color_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/control_lights_color_button"
+        app:layout_constraintTop_toTopOf="@+id/control_lights_color_button"
+        app:srcCompat="@drawable/ic_circle" />
+
+    <io.github.controlwear.virtual.joystick.android.JoystickView
+        android:id="@+id/control_joystick"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:JV_backgroundColor="@color/purple_500"
+        app:JV_borderColor="@color/purple_700"
+        app:JV_borderWidth="12dp"
+        app:JV_buttonColor="@color/black"
+        app:JV_buttonSizeRatio="20%"
+        app:JV_fixedCenter="false"
+        android:layout_margin="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/control_disco_switch" />
+</androidx.constraintlayout.widget.ConstraintLayout>
