@@ -5,28 +5,36 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.partyremote.databinding.ActivityControlBinding
+import com.example.partyremote.models.BluetoothHandler
+import com.example.partyremote.viewmodels.ControlViewModel
+import com.example.partyremote.viewmodels.MainViewModel
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 
 
 lateinit var binding: ActivityControlBinding
-
-var lightsColor = 0
-var isLightOn = true
-var isLaserOn = true
-var isDiscoOn = false
+lateinit var viewModel: ControlViewModel
 
 class ControlActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityControlBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        viewModel = ViewModelProvider(this)[ControlViewModel::class.java]
+        viewModel.context = applicationContext
 
-        binding.controlLightsSwitch.setOnCheckedChangeListener { _, checkedState -> isLightOn = checkedState}
-        binding.controlLasersSwitch.setOnCheckedChangeListener { _, checkedState -> isLaserOn = checkedState}
-        binding.controlLightsSwitch.setOnCheckedChangeListener { _, checkedState -> isDiscoOn = checkedState}
+        binding.controlLightsSwitch.setOnCheckedChangeListener() { _, checkedState ->
+            viewModel.setLightsPower(checkedState)
+        }
+        binding.controlLasersSwitch.setOnCheckedChangeListener { _, checkedState ->
+            viewModel.setLaserPower(checkedState)
+        }
+        binding.controlDiscoSwitch.setOnCheckedChangeListener { _, checkedState ->
+            viewModel.setDiscoMode(checkedState)
+        }
 
         binding.controlLightsColorButton.setOnClickListener {
             ColorPickerDialog.Builder(this)
@@ -34,7 +42,9 @@ class ControlActivity : AppCompatActivity() {
                 .setPreferenceName("MyColorPickerDialog")
                 .setPositiveButton(R.string.ok,
                     ColorEnvelopeListener { envelope, fromUser ->
-                        setLightsColor(envelope)
+                        viewModel.setLightsColor(envelope)
+                        binding.controlLightsPickedColor.imageTintList =
+                            ColorStateList.valueOf(envelope.color)
                     })
                 .setNegativeButton(
                     R.string.cancel
@@ -46,11 +56,11 @@ class ControlActivity : AppCompatActivity() {
         }
 
         binding.controlJoystick.setOnMoveListener { angle, strength ->
-            // TODO: send data to Arduino
+            viewModel.sendJoyStickData(angle, strength)
         }
 
         // set default lights color
-        setLightsColor(
+        viewModel.setLightsColor(
             ColorEnvelope(
                 ContextCompat.getColor(
                     applicationContext,
@@ -58,10 +68,5 @@ class ControlActivity : AppCompatActivity() {
                 )
             )
         )
-    }
-
-    private fun setLightsColor(colorEnvelope: ColorEnvelope) {
-        lightsColor = colorEnvelope.color
-        binding.controlLightsPickedColor.imageTintList = ColorStateList.valueOf(lightsColor)
     }
 }
