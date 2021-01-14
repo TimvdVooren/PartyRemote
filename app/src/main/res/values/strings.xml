@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name"></string>
+    <string name="app_name">Party Remote</string>
+    <string name="main_title_disconnected">Where is that party?</string>
+    <string name="main_bt_status_disconnected">Searching…</string>
+    <string name="main_title_connected">Let\'s get this party started!</string>
+    <string name="main_bt_status_connected">Connected</string>
 </resources>

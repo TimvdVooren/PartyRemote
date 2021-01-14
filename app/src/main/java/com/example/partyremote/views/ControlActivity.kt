@@ -9,7 +9,6 @@ import com.example.partyremote.databinding.ActivityControlBinding
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
-import io.github.controlwear.virtual.joystick.android.JoystickView.OnMoveListener
 
 
 lateinit var binding: ActivityControlBinding
