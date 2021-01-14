@@ -15,7 +15,7 @@
         android:layout_marginEnd="32dp"
         android:text="@string/main_title_disconnected"
         android:textAlignment="center"
-        android:textColor="@color/purple_700"
+        android:textColor="@color/purple_500"
         android:textSize="42sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,25 +62,27 @@
         android:id="@+id/main_bluetooth_status_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/main_bt_status_disconnected"
-        android:textColor="@color/purple_700"
+        android:textColor="@color/purple_500"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_bluetooth_button" />
 
     <Button
         android:id="@+id/main_control_button"
+        style="@style/Widget.AppCompat.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Control Party Bot"
         android:backgroundTint="@color/purple_500"
+        android:text="Control Party Bot"
         android:textColor="@color/white"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_bluetooth_status_image"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toBottomOf="@+id/main_bluetooth_status_image" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,39 +6,38 @@ import android.os.Message
 import android.util.Log
 import java.io.*
 
-class ConnectedThread(private val mmSocket: BluetoothSocket?, uih: Handler?) : Thread() {
-    private val mmInStream: InputStream?
-    private val mmOutStream: OutputStream?
-    var uih: Handler?
+class BluetoothThread(private val btSocket: BluetoothSocket?, private val handler: Handler?) : Thread() {
+    private val inputStream: InputStream?
+    private val outputStream: OutputStream?
 
     override fun run() {
-        val br = BufferedReader(InputStreamReader(mmInStream))
-        Log.i("[THREAD-CT]", "Starting thread")
+        val br = BufferedReader(InputStreamReader(inputStream))
+        Log.i("[BT-THREAD]", "Starting thread")
         while (true) {
             try {
                 val resp = br.readLine()
                 val msg = Message()
                 msg.what = RESPONSE_MESSAGE
                 msg.obj = resp
-                uih?.sendMessage(msg)
+                handler?.sendMessage(msg)
             } catch (e: IOException) {
                 break
             }
         }
-        Log.i("[THREAD-CT]", "While loop ended")
+        Log.i("[BT-THREAD]", "While loop ended")
     }
 
     fun write(bytes: ByteArray?) {
         try {
-            Log.i("[THREAD-CT]", "Writing bytes")
-            mmOutStream!!.write(bytes)
+            Log.i("[BT-THREAD]", "Writing bytes")
+            outputStream!!.write(bytes)
         } catch (e: IOException) {
         }
     }
 
     fun cancel() {
         try {
-            mmSocket?.close()
+            btSocket?.close()
         } catch (e: IOException) {
         }
     }
@@ -50,19 +49,21 @@ class ConnectedThread(private val mmSocket: BluetoothSocket?, uih: Handler?) : T
     init {
         var tmpIn: InputStream? = null
         var tmpOut: OutputStream? = null
-        this.uih = uih
-        Log.i("[THREAD-CT]", "Creating thread")
+        Log.i("[BT-THREAD]", "Creating thread")
+
         try {
-            tmpIn = mmSocket?.inputStream
-            tmpOut = mmSocket?.outputStream
+            tmpIn = btSocket?.inputStream
+            tmpOut = btSocket?.outputStream
         } catch (e: IOException) {
-            Log.e("[THREAD-CT]", "Error:" + e.message)
+            Log.e("[BT-THREAD]", "Error:" + e.message)
         }
-        mmInStream = tmpIn
-        mmOutStream = tmpOut
+
+        inputStream = tmpIn
+        outputStream = tmpOut
+
         try {
-            mmOutStream!!.flush()
+            outputStream!!.flush()
         } catch (e: IOException) {}
-        Log.i("[THREAD-CT]", "IO's obtained")
+        Log.i("[BT-THREAD]", "IO's obtained")
     }
 }
