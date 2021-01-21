@@ -3,7 +3,6 @@ package com.example.partyremote.views
 import android.R
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -12,9 +11,6 @@ import com.example.partyremote.viewmodels.ControlViewModel
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
-import com.spotify.android.appremote.api.ConnectionParams
-import com.spotify.android.appremote.api.Connector
-import com.spotify.android.appremote.api.SpotifyAppRemote
 
 
 lateinit var binding: ActivityControlBinding
@@ -88,7 +84,7 @@ class ControlActivity : AppCompatActivity() {
             ColorEnvelope(
                 ContextCompat.getColor(
                     applicationContext,
-                    R.color.holo_blue_bright
+                    R.color.white
                 )
             )
         )

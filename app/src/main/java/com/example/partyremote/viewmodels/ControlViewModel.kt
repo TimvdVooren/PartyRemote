@@ -17,7 +17,7 @@ class ControlViewModel : ViewModel() {
     private var previousMillis: Long = 0
     private var writingDelay = 200
     private var joystickTimer: Timer? = null
-    var spotifyService = SpotifyService();
+    var spotifyService = SpotifyService()
 
     fun setLightsPower(isLightOn: Boolean) {
         this.isLightOn = isLightOn
@@ -27,7 +27,7 @@ class ControlViewModel : ViewModel() {
 
     fun setLightsColor(colorEnvelope: ColorEnvelope) {
         val command =
-            "C${colorEnvelope.argb[0]}|${colorEnvelope.argb[1]}|${colorEnvelope.argb[2]}|${colorEnvelope.argb[3]}"
+            "C${colorEnvelope.argb[1]}|${colorEnvelope.argb[2]}|${colorEnvelope.argb[3]}"
         sendCommand(command)
     }
 
