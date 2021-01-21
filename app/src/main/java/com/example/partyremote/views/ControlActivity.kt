@@ -24,6 +24,8 @@ lateinit var viewModel: ControlViewModel
 
 class ControlActivity : AppCompatActivity() {
 
+    var playing = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityControlBinding.inflate(layoutInflater)
@@ -32,7 +34,23 @@ class ControlActivity : AppCompatActivity() {
         viewModel.context = applicationContext
 
         binding.controlPlayButton.setOnClickListener {
-            viewModel.playMusic()
+            if (playing) {
+                viewModel.pauseMusic()
+                binding.controlPlayButton.setText("Play")
+                playing = false
+            } else {
+                viewModel.playMusic()
+                binding.controlPlayButton.setText("Pause")
+                playing = true
+            }
+        }
+
+        binding.controlPrevButton.setOnClickListener {
+            viewModel.previousSong()
+        }
+
+        binding.controlNextButton.setOnClickListener {
+            viewModel.nextSong()
         }
 
         binding.controlLightsSwitch.setOnCheckedChangeListener() { _, checkedState ->
@@ -86,6 +104,6 @@ class ControlActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        // Aaand we will finish off here.
+        viewModel.disconnect()
     }
 }

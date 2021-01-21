@@ -52,4 +52,8 @@ class SpotifyService {
     fun previousSong() {
         mSpotifyAppRemote?.getPlayerApi()?.skipPrevious()
     }
+
+    fun disconnect() {
+        SpotifyAppRemote.disconnect(mSpotifyAppRemote);
+    }
 }

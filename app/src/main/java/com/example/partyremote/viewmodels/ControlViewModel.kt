@@ -64,6 +64,10 @@ class ControlViewModel : ViewModel() {
         spotifyService.previousSong()
     }
 
+    fun disconnect() {
+        spotifyService.disconnect()
+    }
+
     private fun sendCommand(command: String) {
         (context as BaseApplication).btHandler.sendData(command)
     }
