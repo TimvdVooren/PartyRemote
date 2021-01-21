@@ -7,9 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.partyremote.databinding.ActivityControlBinding
-import com.example.partyremote.models.BluetoothHandler
 import com.example.partyremote.viewmodels.ControlViewModel
-import com.example.partyremote.viewmodels.MainViewModel
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
@@ -26,7 +24,7 @@ class ControlActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[ControlViewModel::class.java]
         viewModel.context = applicationContext
 
-        binding.controlLightsSwitch.setOnCheckedChangeListener() { _, checkedState ->
+        binding.controlLightsSwitch.setOnCheckedChangeListener { _, checkedState ->
             viewModel.setLightsPower(checkedState)
         }
         binding.controlLasersSwitch.setOnCheckedChangeListener { _, checkedState ->
@@ -43,6 +41,17 @@ class ControlActivity : AppCompatActivity() {
                 .setPositiveButton(R.string.ok,
                     ColorEnvelopeListener { envelope, fromUser ->
                         viewModel.setLightsColor(envelope)
+//                        val red = envelope.argb[1]
+//                        val green = envelope.argb[2]
+//                        val blue = envelope.argb[3]
+//
+//                        if (red > green && red > blue)
+//                            viewModel.toggleRedLedPower()
+//                        else if (green > red && green > blue)
+//                            viewModel.toggleGreenLedPower()
+//                        else if (blue > red && blue > green)
+//                            viewModel.toggleBlueLedPower()
+
                         binding.controlLightsPickedColor.imageTintList =
                             ColorStateList.valueOf(envelope.color)
                     })
@@ -50,7 +59,7 @@ class ControlActivity : AppCompatActivity() {
                     R.string.cancel
                 ) { dialogInterface, i -> dialogInterface.dismiss() }
                 .attachAlphaSlideBar(false)
-                .attachBrightnessSlideBar(true)
+                .attachBrightnessSlideBar(false)
                 .setBottomSpace(12) // set a bottom space between the last slidebar and buttons.
                 .show()
         }
@@ -60,13 +69,13 @@ class ControlActivity : AppCompatActivity() {
         }
 
         // set default lights color
-        viewModel.setLightsColor(
-            ColorEnvelope(
-                ContextCompat.getColor(
-                    applicationContext,
-                    R.color.holo_blue_bright
-                )
-            )
-        )
+//        viewModel.setLightsColor(
+//            ColorEnvelope(
+//                ContextCompat.getColor(
+//                    applicationContext,
+//                    R.color.holo_blue_bright
+//                )
+//            )
+//        )
     }
 }
