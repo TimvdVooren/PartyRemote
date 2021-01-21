@@ -3,6 +3,7 @@ package com.example.partyremote.viewmodels
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.partyremote.BaseApplication
+import com.example.partyremote.services.SpotifyService
 import com.skydoves.colorpickerview.ColorEnvelope
 
 class ControlViewModel : ViewModel() {
@@ -12,6 +13,7 @@ class ControlViewModel : ViewModel() {
     var isLightOn = true
     var isLaserOn = true
     var isDiscoOn = false
+    var spotifyService = SpotifyService();
 
     fun setLightsPower(isLightOn: Boolean) {
         this.isLightOn = isLightOn
@@ -40,6 +42,30 @@ class ControlViewModel : ViewModel() {
     fun sendJoyStickData(angle: Int, strength: Int) {
         val command = "J$angle|$strength"
         sendCommand(command)
+    }
+
+    fun connect(){
+        spotifyService.connect(context)
+    }
+
+    fun playMusic() {
+        spotifyService.playMusic()
+    }
+
+    fun pauseMusic() {
+        spotifyService.pauseMusic()
+    }
+
+    fun nextSong() {
+        spotifyService.nextSong()
+    }
+
+    fun previousSong() {
+        spotifyService.previousSong()
+    }
+
+    fun disconnect() {
+        spotifyService.disconnect()
     }
 
     private fun sendCommand(command: String) {

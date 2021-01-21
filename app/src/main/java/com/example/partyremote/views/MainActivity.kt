@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -53,7 +54,8 @@ class MainActivity : AppCompatActivity() {
                     ContextCompat.getColor(applicationContext, R.color.searching_blue)
                 )
                 binding.mainTitle.text = getString(R.string.main_title_disconnected)
-                binding.mainBluetoothStatusText.text = getString(R.string.main_bt_status_disconnected)
+                binding.mainBluetoothStatusText.text =
+                    getString(R.string.main_bt_status_disconnected)
                 binding.mainControlButton.visibility = View.INVISIBLE;
                 binding.mainControlButton.isEnabled = false;
 
@@ -75,4 +77,6 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(enableBTIntent, viewModel.getRequestCode())
         }
     }
+
+
 }
