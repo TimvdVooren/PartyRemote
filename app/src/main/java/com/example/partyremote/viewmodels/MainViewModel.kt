@@ -11,7 +11,8 @@ class MainViewModel : ViewModel() {
     val isBtConnected = MutableLiveData<Boolean>(false)
 
     fun initiateBluetoothProcess() {
-        isBtConnected.value = (context as BaseApplication).btHandler.initiateBluetoothProcess()
+        val btConnectionStatus = (context as BaseApplication).btHandler.initiateBluetoothProcess()
+        isBtConnected.postValue(btConnectionStatus)
     }
 
     fun isBluetoothEnabled(): Boolean {

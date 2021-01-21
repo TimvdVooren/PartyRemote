@@ -30,7 +30,8 @@ class BluetoothThread(private val btSocket: BluetoothSocket?, private val handle
     fun write(bytes: ByteArray?) {
         try {
             Log.i("[BT-THREAD]", "Writing bytes")
-            outputStream!!.write(bytes)
+            outputStream?.flush();
+            outputStream?.write(bytes)
         } catch (e: IOException) {
         }
     }

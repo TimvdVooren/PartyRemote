@@ -8,9 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.partyremote.databinding.ActivityControlBinding
-import com.example.partyremote.models.BluetoothHandler
 import com.example.partyremote.viewmodels.ControlViewModel
-import com.example.partyremote.viewmodels.MainViewModel
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
@@ -24,7 +22,7 @@ lateinit var viewModel: ControlViewModel
 
 class ControlActivity : AppCompatActivity() {
 
-    var playing = false
+    var isSpotifyPlaying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,26 +32,25 @@ class ControlActivity : AppCompatActivity() {
         viewModel.context = applicationContext
 
         binding.controlPlayButton.setOnClickListener {
-            if (playing) {
+            if (isSpotifyPlaying) {
                 viewModel.pauseMusic()
-                binding.controlPlayButton.setText("Play")
-                playing = false
+                binding.controlPlayButton.text = "Play"
+                isSpotifyPlaying = false
             } else {
                 viewModel.playMusic()
-                binding.controlPlayButton.setText("Pause")
-                playing = true
+                binding.controlPlayButton.text = "Pause"
+                isSpotifyPlaying = true
             }
         }
 
         binding.controlPrevButton.setOnClickListener {
             viewModel.previousSong()
         }
-
         binding.controlNextButton.setOnClickListener {
             viewModel.nextSong()
         }
 
-        binding.controlLightsSwitch.setOnCheckedChangeListener() { _, checkedState ->
+        binding.controlLightsSwitch.setOnCheckedChangeListener { _, checkedState ->
             viewModel.setLightsPower(checkedState)
         }
         binding.controlLasersSwitch.setOnCheckedChangeListener { _, checkedState ->
@@ -68,7 +65,7 @@ class ControlActivity : AppCompatActivity() {
                 .setTitle("Pick a color")
                 .setPreferenceName("MyColorPickerDialog")
                 .setPositiveButton(R.string.ok,
-                    ColorEnvelopeListener { envelope, fromUser ->
+                    ColorEnvelopeListener { envelope, _ ->
                         viewModel.setLightsColor(envelope)
                         binding.controlLightsPickedColor.imageTintList =
                             ColorStateList.valueOf(envelope.color)
@@ -77,7 +74,7 @@ class ControlActivity : AppCompatActivity() {
                     R.string.cancel
                 ) { dialogInterface, i -> dialogInterface.dismiss() }
                 .attachAlphaSlideBar(false)
-                .attachBrightnessSlideBar(true)
+                .attachBrightnessSlideBar(false)
                 .setBottomSpace(12) // set a bottom space between the last slidebar and buttons.
                 .show()
         }

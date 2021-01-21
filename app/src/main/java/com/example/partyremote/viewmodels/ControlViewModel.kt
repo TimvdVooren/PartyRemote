@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.partyremote.BaseApplication
 import com.example.partyremote.services.SpotifyService
 import com.skydoves.colorpickerview.ColorEnvelope
+import java.util.*
 
 class ControlViewModel : ViewModel() {
 
@@ -13,6 +14,9 @@ class ControlViewModel : ViewModel() {
     var isLightOn = true
     var isLaserOn = true
     var isDiscoOn = false
+    private var previousMillis: Long = 0
+    private var writingDelay = 200
+    private var joystickTimer: Timer? = null
     var spotifyService = SpotifyService();
 
     fun setLightsPower(isLightOn: Boolean) {
@@ -40,8 +44,18 @@ class ControlViewModel : ViewModel() {
     }
 
     fun sendJoyStickData(angle: Int, strength: Int) {
-        val command = "J$angle|$strength"
+        joystickTimer?.cancel()
+
+        var command = "J$angle|$strength"
         sendCommand(command)
+
+        joystickTimer = Timer()
+        joystickTimer?.schedule(object : TimerTask() {
+            override fun run() {
+                command = "J0|0"
+                sendCommand(command)
+            }
+        }, (writingDelay*2).toLong())
     }
 
     fun connect(){
@@ -69,6 +83,10 @@ class ControlViewModel : ViewModel() {
     }
 
     private fun sendCommand(command: String) {
-        (context as BaseApplication).btHandler.sendData(command)
+        val currentMillis = System.currentTimeMillis()
+        if (currentMillis - previousMillis >= writingDelay) {
+            previousMillis = currentMillis
+            (context as BaseApplication).btHandler.sendData(command)
+        }
     }
 }
