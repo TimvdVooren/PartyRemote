@@ -7,13 +7,12 @@ import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
 
 class SpotifyService {
-    private val CLIENT_ID = "9128cfcc2523420e90fde0851968fdbc"
+    private val CLIENT_ID = "141360a1a2f84ddcad0e23cb2d67ad48"
     private val REDIRECT_URI = "http://localhost:8888/callback"
-    private var mSpotifyAppRemote: SpotifyAppRemote? = null
+    private var spotifyAppRemote: SpotifyAppRemote? = null
+    private var isPlaylistPlaying = false
 
     fun connect(context: Context){
-        // Set the connection parameters
-
         // Set the connection parameters
         val connectionParams = ConnectionParams.Builder(CLIENT_ID)
             .setRedirectUri(REDIRECT_URI)
@@ -23,7 +22,7 @@ class SpotifyService {
         SpotifyAppRemote.connect(context, connectionParams,
             object : Connector.ConnectionListener {
                 override fun onConnected(spotifyAppRemote: SpotifyAppRemote) {
-                    mSpotifyAppRemote = spotifyAppRemote
+                    this@SpotifyService.spotifyAppRemote = spotifyAppRemote
                     Log.d("MainActivity", "Connected! Yay!")
 
                     // Now you can start interacting with App Remote
@@ -38,22 +37,27 @@ class SpotifyService {
     }
 
     fun playMusic() {
-        mSpotifyAppRemote?.getPlayerApi()?.play("spotify:playlist:01DbkmjFPYPeZyw7MxBal5?si=cjqhTLRZR5WbvylOHNbalA");
+        if (!isPlaylistPlaying) {
+            spotifyAppRemote?.playerApi?.play("spotify:playlist:6wqk4X53DTXIjOAoFDIj40")
+            isPlaylistPlaying = true
+        } else {
+            spotifyAppRemote?.playerApi?.resume()
+        }
     }
 
     fun pauseMusic() {
-        mSpotifyAppRemote?.getPlayerApi()?.pause()
+        spotifyAppRemote?.playerApi?.pause()
     }
 
     fun nextSong() {
-        mSpotifyAppRemote?.getPlayerApi()?.skipNext()
+        spotifyAppRemote?.playerApi?.skipNext()
     }
 
     fun previousSong() {
-        mSpotifyAppRemote?.getPlayerApi()?.skipPrevious()
+        spotifyAppRemote?.playerApi?.skipPrevious()
     }
 
     fun disconnect() {
-        SpotifyAppRemote.disconnect(mSpotifyAppRemote);
+        SpotifyAppRemote.disconnect(spotifyAppRemote);
     }
 }

@@ -30,20 +30,28 @@ class ControlActivity : AppCompatActivity() {
         binding.controlPlayButton.setOnClickListener {
             if (isSpotifyPlaying) {
                 viewModel.pauseMusic()
-                binding.controlPlayButton.text = "Play"
+                binding.controlPlayButton.setImageResource(R.drawable.ic_media_play)
+                binding.controlPlayText.text = "Play"
                 isSpotifyPlaying = false
             } else {
                 viewModel.playMusic()
-                binding.controlPlayButton.text = "Pause"
+                binding.controlPlayButton.setImageResource(R.drawable.ic_media_pause)
+                binding.controlPlayText.text = "Pause"
                 isSpotifyPlaying = true
             }
         }
 
         binding.controlPrevButton.setOnClickListener {
             viewModel.previousSong()
+            binding.controlPlayButton.setImageResource(R.drawable.ic_media_pause)
+            binding.controlPlayText.text = "Pause"
+            isSpotifyPlaying = true
         }
         binding.controlNextButton.setOnClickListener {
             viewModel.nextSong()
+            binding.controlPlayButton.setImageResource(R.drawable.ic_media_pause)
+            binding.controlPlayText.text = "Pause"
+            isSpotifyPlaying = true
         }
 
         binding.controlLightsSwitch.setOnCheckedChangeListener { _, checkedState ->

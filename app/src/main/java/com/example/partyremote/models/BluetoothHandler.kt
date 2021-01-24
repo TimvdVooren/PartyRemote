@@ -24,6 +24,8 @@ class BluetoothHandler(val btAdapter: BluetoothAdapter) {
     var handler: Handler? = null
 
     fun initiateBluetoothProcess(): Boolean{
+        var isConnected = false
+
         if (btAdapter.isEnabled) {
 
             //attempt to connect to bluetooth module
@@ -36,11 +38,12 @@ class BluetoothHandler(val btAdapter: BluetoothAdapter) {
                 btSocket = tmp
                 btSocket?.connect()
                 Log.i("[BLUETOOTH]", "Connected to: " + btDevice!!.name)
+                isConnected = true
             } catch (e: IOException) {
                 try {
-                    btSocket!!.close()
+                    btSocket?.close()
                 } catch (c: IOException) {
-                    return false
+                    return isConnected
                 }
             }
             Log.i("[BLUETOOTH]", "Creating handler")
@@ -56,11 +59,9 @@ class BluetoothHandler(val btAdapter: BluetoothAdapter) {
             Log.i("[BLUETOOTH]", "Creating and running Thread")
             btThread = BluetoothThread(btSocket, handler)
             btThread?.start()
-
-            return true
         }
 
-        return false
+        return isConnected
     }
 
     fun sendData(command: String) {

@@ -62,7 +62,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'io.github.controlwear:virtualjoystick:1.10.1'
     implementation "com.github.skydoves:colorpickerpreference:2.0.5"
-
     implementation project(':spotify-app-remote')
     implementation "com.google.code.gson:gson:2.8.5"
 }

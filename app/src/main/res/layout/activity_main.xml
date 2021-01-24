@@ -36,7 +36,7 @@
         app:tint="@color/searching_blue" />
 
     <ImageView
-        android:id="@+id/main_bluetooth_button"
+        android:id="@+id/main_bluetooth_icon_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="12dp"
@@ -52,10 +52,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/main_bluetooth_button"
-        app:layout_constraintEnd_toEndOf="@+id/main_bluetooth_button"
-        app:layout_constraintStart_toStartOf="@+id/main_bluetooth_button"
-        app:layout_constraintTop_toTopOf="@+id/main_bluetooth_button"
+        app:layout_constraintBottom_toBottomOf="@+id/main_bluetooth_icon_background"
+        app:layout_constraintEnd_toEndOf="@+id/main_bluetooth_icon_background"
+        app:layout_constraintStart_toStartOf="@+id/main_bluetooth_icon_background"
+        app:layout_constraintTop_toTopOf="@+id/main_bluetooth_icon_background"
         app:srcCompat="@drawable/ic_bluetooth_disabled_24" />
 
     <TextView
@@ -69,7 +69,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_bluetooth_button" />
+        app:layout_constraintTop_toBottomOf="@+id/main_bluetooth_icon_background" />
 
     <Button
         android:id="@+id/main_control_button"

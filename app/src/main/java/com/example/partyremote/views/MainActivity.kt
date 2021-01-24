@@ -32,10 +32,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.mainBluetoothButton.setOnClickListener {
-            viewModel.initiateBluetoothProcess()
-        }
-
         viewModel.isBtConnected.observe(this, Observer { isConnected ->
             if (isConnected) {
                 binding.mainBluetoothIcon.setImageResource(R.drawable.ic_bluetooth_connected_24)
@@ -47,7 +43,6 @@ class MainActivity : AppCompatActivity() {
                 binding.mainControlButton.visibility = View.VISIBLE;
                 binding.mainControlButton.isEnabled = true;
 
-                binding.mainBluetoothButton.setOnClickListener {}
             } else {
                 binding.mainBluetoothIcon.setImageResource(R.drawable.ic_bluetooth_disabled_24)
                 binding.mainBluetoothStatusImage.imageTintList = ColorStateList.valueOf(
@@ -59,9 +54,7 @@ class MainActivity : AppCompatActivity() {
                 binding.mainControlButton.visibility = View.INVISIBLE;
                 binding.mainControlButton.isEnabled = false;
 
-                binding.mainBluetoothButton.setOnClickListener {
-                    viewModel.initiateBluetoothProcess()
-                }
+                viewModel.initiateBluetoothProcess()
             }
         })
     }
