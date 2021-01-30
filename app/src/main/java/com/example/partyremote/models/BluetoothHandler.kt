@@ -14,6 +14,7 @@ import java.util.*
 
 class BluetoothHandler(val btAdapter: BluetoothAdapter) {
 
+    // Change this MAC address according to the one of the HC05 module you have
     private val BT_MODULE_MAC_ADDRESS = "98:D3:51:FD:E8:4A"
     private val MY_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
     val REQUEST_ENABLE_BT = 1
@@ -24,8 +25,7 @@ class BluetoothHandler(val btAdapter: BluetoothAdapter) {
     var handler: Handler? = null
 
     fun initiateBluetoothProcess(): Boolean{
-        var isConnected = false
-
+        var isConnected = false;
         if (btAdapter.isEnabled) {
 
             //attempt to connect to bluetooth module
@@ -59,8 +59,9 @@ class BluetoothHandler(val btAdapter: BluetoothAdapter) {
             Log.i("[BLUETOOTH]", "Creating and running Thread")
             btThread = BluetoothThread(btSocket, handler)
             btThread?.start()
-        }
 
+            return isConnected
+        }
         return isConnected
     }
 

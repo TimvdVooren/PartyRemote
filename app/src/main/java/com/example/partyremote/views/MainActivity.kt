@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -13,12 +12,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.partyremote.R
 import com.example.partyremote.databinding.ActivityMainBinding
 import com.example.partyremote.viewmodels.MainViewModel
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var viewModel: MainViewModel
+    private var btConnectionRetryTimer: Timer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.isBtConnected.observe(this, Observer { isConnected ->
+            btConnectionRetryTimer?.cancel()
+
             if (isConnected) {
                 binding.mainBluetoothIcon.setImageResource(R.drawable.ic_bluetooth_connected_24)
                 binding.mainBluetoothStatusImage.imageTintList = ColorStateList.valueOf(
@@ -40,9 +43,8 @@ class MainActivity : AppCompatActivity() {
                 )
                 binding.mainTitle.text = getString(R.string.main_title_connected)
                 binding.mainBluetoothStatusText.text = getString(R.string.main_bt_status_connected)
-                binding.mainControlButton.visibility = View.VISIBLE;
-                binding.mainControlButton.isEnabled = true;
-
+                binding.mainControlButton.visibility = View.VISIBLE
+                binding.mainControlButton.isEnabled = true
             } else {
                 binding.mainBluetoothIcon.setImageResource(R.drawable.ic_bluetooth_disabled_24)
                 binding.mainBluetoothStatusImage.imageTintList = ColorStateList.valueOf(
@@ -51,10 +53,15 @@ class MainActivity : AppCompatActivity() {
                 binding.mainTitle.text = getString(R.string.main_title_disconnected)
                 binding.mainBluetoothStatusText.text =
                     getString(R.string.main_bt_status_disconnected)
-                binding.mainControlButton.visibility = View.INVISIBLE;
+                binding.mainControlButton.visibility = View.INVISIBLE
                 binding.mainControlButton.isEnabled = false;
 
-                viewModel.initiateBluetoothProcess()
+                btConnectionRetryTimer = Timer()
+                btConnectionRetryTimer?.schedule(object : TimerTask() {
+                    override fun run() {
+                        viewModel.initiateBluetoothProcess()
+                    }
+                }, 2000)
             }
         })
     }

@@ -70,7 +70,9 @@ class ControlActivity : AppCompatActivity() {
                 .setPreferenceName("MyColorPickerDialog")
                 .setPositiveButton(R.string.ok,
                     ColorEnvelopeListener { envelope, _ ->
-                        viewModel.setLightsColor(envelope)
+                        if (binding.controlLightsSwitch.isChecked) {
+                            viewModel.setLightsColor(envelope)
+                        }
                         binding.controlLightsPickedColor.imageTintList =
                             ColorStateList.valueOf(envelope.color)
                     })
