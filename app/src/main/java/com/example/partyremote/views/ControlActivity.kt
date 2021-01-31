@@ -5,64 +5,108 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.partyremote.databinding.ActivityControlBinding
+import com.example.partyremote.viewmodels.ControlViewModel
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
-import io.github.controlwear.virtual.joystick.android.JoystickView.OnMoveListener
 
 
 lateinit var binding: ActivityControlBinding
-
-var lightsColor = 0
-var isLightOn = true
-var isLaserOn = true
-var isDiscoOn = false
+lateinit var viewModel: ControlViewModel
 
 class ControlActivity : AppCompatActivity() {
+
+    var isSpotifyPlaying = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityControlBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        viewModel = ViewModelProvider(this)[ControlViewModel::class.java]
+        viewModel.context = applicationContext
 
-        binding.controlLightsSwitch.setOnCheckedChangeListener { _, checkedState -> isLightOn = checkedState}
-        binding.controlLasersSwitch.setOnCheckedChangeListener { _, checkedState -> isLaserOn = checkedState}
-        binding.controlLightsSwitch.setOnCheckedChangeListener { _, checkedState -> isDiscoOn = checkedState}
+        binding.controlPlayButton.setOnClickListener {
+            if (isSpotifyPlaying) {
+                viewModel.pauseMusic()
+                binding.controlPlayButton.setImageResource(R.drawable.ic_media_play)
+                binding.controlPlayText.text = "Play"
+                isSpotifyPlaying = false
+            } else {
+                viewModel.playMusic()
+                binding.controlPlayButton.setImageResource(R.drawable.ic_media_pause)
+                binding.controlPlayText.text = "Pause"
+                isSpotifyPlaying = true
+            }
+        }
+
+        binding.controlPrevButton.setOnClickListener {
+            viewModel.previousSong()
+            binding.controlPlayButton.setImageResource(R.drawable.ic_media_pause)
+            binding.controlPlayText.text = "Pause"
+            isSpotifyPlaying = true
+        }
+        binding.controlNextButton.setOnClickListener {
+            viewModel.nextSong()
+            binding.controlPlayButton.setImageResource(R.drawable.ic_media_pause)
+            binding.controlPlayText.text = "Pause"
+            isSpotifyPlaying = true
+        }
+
+        binding.controlLightsSwitch.setOnCheckedChangeListener { _, checkedState ->
+            viewModel.setLightsPower(checkedState)
+        }
+        binding.controlLasersSwitch.setOnCheckedChangeListener { _, checkedState ->
+            viewModel.setLaserPower(checkedState)
+        }
+        binding.controlDiscoSwitch.setOnCheckedChangeListener { _, checkedState ->
+            viewModel.setDiscoMode(checkedState)
+        }
 
         binding.controlLightsColorButton.setOnClickListener {
             ColorPickerDialog.Builder(this)
                 .setTitle("Pick a color")
                 .setPreferenceName("MyColorPickerDialog")
                 .setPositiveButton(R.string.ok,
-                    ColorEnvelopeListener { envelope, fromUser ->
-                        setLightsColor(envelope)
+                    ColorEnvelopeListener { envelope, _ ->
+                        if (binding.controlLightsSwitch.isChecked) {
+                            viewModel.setLightsColor(envelope)
+                        }
+                        binding.controlLightsPickedColor.imageTintList =
+                            ColorStateList.valueOf(envelope.color)
                     })
                 .setNegativeButton(
                     R.string.cancel
                 ) { dialogInterface, i -> dialogInterface.dismiss() }
                 .attachAlphaSlideBar(false)
-                .attachBrightnessSlideBar(true)
+                .attachBrightnessSlideBar(false)
                 .setBottomSpace(12) // set a bottom space between the last slidebar and buttons.
                 .show()
         }
 
         binding.controlJoystick.setOnMoveListener { angle, strength ->
-            // TODO: send data to Arduino
+            viewModel.sendJoyStickData(angle, strength)
         }
 
         // set default lights color
-        setLightsColor(
+        viewModel.setLightsColor(
             ColorEnvelope(
                 ContextCompat.getColor(
                     applicationContext,
-                    R.color.holo_blue_bright
+                    R.color.white
                 )
             )
         )
     }
 
-    private fun setLightsColor(colorEnvelope: ColorEnvelope) {
-        lightsColor = colorEnvelope.color
-        binding.controlLightsPickedColor.imageTintList = ColorStateList.valueOf(lightsColor)
+    override fun onStart() {
+        super.onStart()
+        viewModel.connect()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.disconnect()
     }
 }
